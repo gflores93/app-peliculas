@@ -1,0 +1,19 @@
+.contenedor-pelicula {
+    border: 1px solid black;
+    margin-bottom: 1rem;
+    padding: 1rem;
+}
+
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40vh; /* Full viewport height */
+    width: 100vw; /* Full viewport width */
+  }
+  
+  .loading {
+    width: 100px; /* Adjust size as needed */
+    height: 100px; /* Adjust size as needed */
+  }
+  
