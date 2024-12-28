@@ -1,29 +1,40 @@
-@if (!peliculas) {
-  <div class="loading-container"> 
-    <img class="loading" src="loading.gif" /> 
-  </div>
-}
+<button (click)="agregarPelicula()">Agregar película</button>
 
-@else if (peliculas.length === 0) {
-  <div>
-    <p>No hay elementos para mostrar</p>
-  </div>
-}
+<app-listado-generico [listado]="peliculas">
+    <!-- <ng-container vacio>
+        <span style="color: red">No hay películas para ti</span>
+    </ng-container> -->
 
-@else {
-  @for (pelicula of peliculas; track $index) {
-    <div class="contenedor-pelicula">
-      <div style="display: flex; flex-direction: row; gap:10px;">
-        <div>
-          <img [ngSrc]="pelicula.poster" width="169" height="250" [priority]="$index == 1">
-        </div>
-        <div>
-          <p>{{$index}}.- Película: {{pelicula.titulo}}</p>
-          <p>Fecha de Lanzamiento: {{pelicula.fechaLanzamiento | date:'dd-MMMM-yyyy' }}</p>
-          <p>Precio: {{ pelicula.precio | currency}}</p>
-        </div>
-      </div>
-    </div>
-  }
-}
+    <!-- <ng-container cargando>
+        <img src="loading-2.gif" />
+    </ng-container> -->
+
+    <ng-container contenido>
+        @for (pelicula of peliculas; track $index) {
+            <div class="contenedor-pelicula">
+                <div style="display: flex; flex-direction: row; gap:10px;">
+                    <div>
+                        @if(pelicula.poster)
+                        {
+                        <img [ngSrc]="pelicula.poster" width="169" height="250" [priority]="$index == 0">
+                        }
+                        @else
+                        {
+                        <img src="default-img.jpg" width="169" height="250">
+                        }
+                    </div>
+                    <div>
+                        <p>{{$index}}.- Película: {{pelicula.titulo}}</p>
+                        <p>Fecha de Lanzamiento: {{pelicula.fechaLanzamiento | date:'dd-MMMM-yyyy' }}</p>
+                        <p>Precio: {{ pelicula.precio | currency}}</p>
+                        <button mat-flat-button (click)="remover(pelicula)">
+                            <mat-icon>delete</mat-icon>
+                            Remover
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </ng-container>
+</app-listado-generico>
 

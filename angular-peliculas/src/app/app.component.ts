@@ -52,7 +52,7 @@ export class AppComponent implements OnInit {
         }
       ];
 
-      this.peliculasProximosEstrenos = [  
+      this.peliculasProximosEstrenos = [
         {
           titulo: 'Fast X',
           fechaLanzamiento: new Date('2023-05-03'),
@@ -64,7 +64,7 @@ export class AppComponent implements OnInit {
           fechaLanzamiento: new Date('2016-05-03'),
           precio: 600.99,
           poster: 'https://upload.wikimedia.org/wikipedia/en/thumb/7/74/Guardians_of_the_Galaxy_Vol._3_poster.jpg/220px-Guardians_of_the_Galaxy_Vol._3_poster.jpg'
-        }, 
+        },
         {
           titulo: 'Super Mario Bros',
           fechaLanzamiento: new Date('2023-05-03'),
@@ -72,11 +72,11 @@ export class AppComponent implements OnInit {
           poster: 'https://upload.wikimedia.org/wikipedia/en/thumb/4/44/The_Super_Mario_Bros._Movie_poster.jpg/220px-The_Super_Mario_Bros._Movie_poster.jpg'
         },
       ];
+
     }, 2000);
   }
 
   peliculasEnCines!: any[];
   peliculasProximosEstrenos!: any[];
-
 
 }
