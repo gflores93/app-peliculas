@@ -1,1 +1,3 @@
-<p>El id del actor a editar es {{id}}</p>
+<h2>Editar Actores</h2>
+
+<app-formulario-actores [modelo]="actor" (posteoFormulario)="guardarCambios($event)"></app-formulario-actores>
