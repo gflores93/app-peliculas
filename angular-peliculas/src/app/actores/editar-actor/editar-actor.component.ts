@@ -15,7 +15,8 @@ export class EditarActorComponent {
     id: 1,
     nombre: 'Actor 001',
     // fechaNacimiento: new Date('1993-12-15') // js transforms date into timezone (e.g. UTC-6)
-    fechaNacimiento: new Date(1993, 11, 15) // months in js are from 0-11
+    fechaNacimiento: new Date(1993, 11, 15), // months in js are from 0-11
+    foto: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Tom_Holland_by_Gage_Skidmore.jpg/220px-Tom_Holland_by_Gage_Skidmore.jpg'
   }
 
   guardarCambios(actor: ActorCreactionDTO) {
