@@ -5,7 +5,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { RouterLink } from '@angular/router';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActorCreactionDTO, ActorDTO } from '../actores';
+import { ActorCreacionDTO, ActorDTO } from '../actores';
 import moment from 'moment';
 import { fechaNoPuedeSerFutura } from '../../compartidos/componentes/funciones/validaciones';
 import { InputImgComponent } from "../../compartidos/componentes/input-img/input-img.component";
@@ -28,7 +28,7 @@ export class FormularioActoresComponent implements OnInit{
   private formBuilder = inject(FormBuilder);
 
   @Input() modelo?: ActorDTO;
-  @Output() posteoFormulario = new EventEmitter<ActorCreactionDTO>();
+  @Output() posteoFormulario = new EventEmitter<ActorCreacionDTO>();
 
   form = this.formBuilder.group({
     nombre: ['', {
@@ -68,7 +68,7 @@ export class FormularioActoresComponent implements OnInit{
     if(!this.form.valid) {
       return;
     }
-    const actor = this.form.value as ActorCreactionDTO;
+    const actor = this.form.value as ActorCreacionDTO;
     actor.fechaNacimiento = moment(actor.fechaNacimiento).toDate();
 
     // si es string significa que es el mismo valor guardado en la base de datos, si es File, es una nuevo

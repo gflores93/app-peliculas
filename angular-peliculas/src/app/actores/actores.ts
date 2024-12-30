@@ -5,7 +5,7 @@ export interface ActorDTO {
     foto?: string;
 }
 
-export interface ActorCreactionDTO {
+export interface ActorCreacionDTO {
     nombre: string;
     fechaNacimiento: Date;
     foto?: File;

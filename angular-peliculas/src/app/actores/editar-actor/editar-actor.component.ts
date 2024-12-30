@@ -1,5 +1,5 @@
 import { Component, Input, numberAttribute } from '@angular/core';
-import { ActorCreactionDTO, ActorDTO } from '../actores';
+import { ActorCreacionDTO, ActorDTO } from '../actores';
 import { FormularioActoresComponent } from "../formulario-actores/formulario-actores.component";
 
 @Component({
@@ -19,7 +19,7 @@ export class EditarActorComponent {
     foto: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Tom_Holland_by_Gage_Skidmore.jpg/220px-Tom_Holland_by_Gage_Skidmore.jpg'
   }
 
-  guardarCambios(actor: ActorCreactionDTO) {
+  guardarCambios(actor: ActorCreacionDTO) {
     console.log('editando actor', actor);
   }
 }
