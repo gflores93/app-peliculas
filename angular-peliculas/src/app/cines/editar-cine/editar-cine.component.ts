@@ -13,7 +13,9 @@ export class EditarCineComponent {
 
   cine: CineDTO = {
     id: 1,
-    nombre: 'Cinepolis Manzanillo'
+    nombre: 'CineStar Erlangen',
+    latitud: 49.59210628447327, 
+    longitud: 11.005521370135664
   }
 
   guardarCambios(cine: CineCreacionDTO) {
