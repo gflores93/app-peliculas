@@ -2,6 +2,7 @@ import { Component, Input, numberAttribute } from '@angular/core';
 import { PeliculaCreacionDTO, PeliculaDTO } from '../peliculas';
 import { FormularioPeliculasComponent } from "../formulario-peliculas/formulario-peliculas.component";
 import { SelectorMultipleDTO } from '../../compartidos/componentes/selector-multiple/selector-multiple';
+import { ActorAutocompleteDTO } from '../../actores/actores';
 
 @Component({
   selector: 'app-editar-pelicula',
@@ -12,6 +13,7 @@ import { SelectorMultipleDTO } from '../../compartidos/componentes/selector-mult
 export class EditarPeliculaComponent {
   @Input({ transform: numberAttribute }) id!: number;
 
+  // usado en form
   pelicula: PeliculaDTO =
     {
       id: 1,
@@ -21,6 +23,7 @@ export class EditarPeliculaComponent {
       poster: 'https://upload.wikimedia.org/wikipedia/en/6/6c/Spider-Man_%282002_film%29_poster.jpg?20171215231428'
     };
 
+  // usados en selector multiple
   generosSeleccionados: SelectorMultipleDTO[] = [
     { llave: 2, valor: 'Acción' },
   ];
@@ -37,6 +40,16 @@ export class EditarPeliculaComponent {
   cinesNoSeleccionados: SelectorMultipleDTO[] = [
     { llave: 1, valor: 'Agora Mall' },
     { llave: 3, valor: 'Acropolis' },
+  ];
+
+  // usado en autocomplete
+  actoresSeleccionados: ActorAutocompleteDTO[] = [
+    {
+      id: 2,
+      nombre: 'Tom Hanks',
+      personaje: 'Forrest Gump',
+      foto: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Tom_Hanks_TIFF_2019.jpg/220px-Tom_Hanks_TIFF_2019.jpg'
+    },
   ];
 
   guardarCambios(pelicula: PeliculaCreacionDTO) {
