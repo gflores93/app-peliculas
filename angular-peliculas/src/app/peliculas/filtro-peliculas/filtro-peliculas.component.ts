@@ -6,10 +6,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ListadoPeliculasComponent } from "../listado-peliculas/listado-peliculas.component";
-import { FiltroPeliculas } from './filtroPelicula';
+import { FiltroPeliculas } from './filtro-peliculas';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { parseBoolean, parseNumber } from '../../compartidos/componentes/funciones/parseTypes';
+import { parseBoolean, parseNumber } from '../../compartidos/componentes/funciones/parse-types';
 
 
 @Component({

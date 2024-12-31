@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
 import { CineCreacionDTO, CineDTO } from '../cines';
 import { MapaComponent } from "../../compartidos/componentes/mapa/mapa.component";
-import { Coordenada } from '../../compartidos/componentes/mapa/Coordenada';
+import { Coordenada } from '../../compartidos/componentes/mapa/coordenada';
 
 @Component({
   selector: 'app-formulario-cines',
