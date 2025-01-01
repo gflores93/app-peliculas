@@ -2,16 +2,16 @@
 
 namespace PeliculasAPI
 {
-    public class RepositorioEnMemoria : IRepositorio
+    public class RepositorioSQLServer : IRepositorio
     {
         private List<Genero> _generos;
 
-        public RepositorioEnMemoria()
+        public RepositorioSQLServer()
         {
             _generos = new List<Genero>
             {
-                new Genero{Id = 1, Nombre = "Comedia"},
-                new Genero{Id = 2, Nombre = "Acción"},
+                new Genero{Id = 1, Nombre = "Comedia SQL"},
+                new Genero{Id = 2, Nombre = "Drama SQL"},
             };
         }
 
@@ -26,15 +26,14 @@ namespace PeliculasAPI
             return _generos.FirstOrDefault(g => g.Id == id);
         }
 
-        public void Crear(Genero genero)
-        {
-            _generos.Add(genero);
-        }
-
         public bool Existe(string nombre)
         {
             return _generos.Any(g => g.Nombre == nombre);
         }
 
+        public void Crear(Genero genero)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
