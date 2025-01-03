@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
+import { GenerosService } from '../generos.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-indice-generos',
@@ -10,4 +12,14 @@ import { RouterLink } from '@angular/router';
 })
 export class IndiceGenerosComponent {
 
+  private generosService = inject(GenerosService);
+
+  constructor() {
+    this.generosService.obtenerTodos().subscribe(
+      {
+        next: generos => console.log(generos),
+        error: error => console.log(error)
+      }
+    );
+  }
 }
