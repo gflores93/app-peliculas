@@ -3,6 +3,22 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# Ignore the main appsettings file
+appsettings.json
+
+# Ignore appsettings files for specific environments
+appsettings.Development.json
+appsettings.Production.json
+
+# Other files to ignore
+bin/
+obj/
+*.user
+*.suo
+*.tmp
+*.log
+
+
 # User-specific files
 *.rsuser
 *.suo
