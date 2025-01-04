@@ -95,13 +95,14 @@ namespace PeliculasAPI.Controllers
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var genero = await _context.Generos.FindAsync(id);
-            if (genero == null)
+            var registrosBorrados = await _context.Generos.Where(g => g.Id == id).ExecuteDeleteAsync();
+
+            if (registrosBorrados == 0)
             {
                 return NotFound();
             }
-            _context.Generos.Remove(genero);
-            await _context.SaveChangesAsync();
+
+            await _outputCacheStore.EvictByTagAsync(cacheTag, default); // limpieza de cache del tag generos
             return NoContent();
         }
 
