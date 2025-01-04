@@ -42,16 +42,19 @@ namespace PeliculasAPI.Controllers
                 .ToListAsync();
         }
 
-        [HttpGet("{id}", Name = "ObtenerGeneroPorId")]
+        [HttpGet("{id:int}", Name = "ObtenerGeneroPorId")]
         [OutputCache(Tags = [cacheTag])]
         public async Task<ActionResult<GeneroDTO>> Get(int id)
         {
-            var genero = await _context.Generos.FindAsync(id);
+            var genero = await _context.Generos
+                .ProjectTo<GeneroDTO>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(g => g.Id == id);
+
             if (genero == null)
             {
-                return NotFound();
+                return NotFound(new { Error = $"Id: {id} not found" });
             }
-            return _mapper.Map<GeneroDTO>(genero);
+            return genero;
         }
 
         [HttpPost]
@@ -59,19 +62,37 @@ namespace PeliculasAPI.Controllers
         {
             //var genero = new Genero { Nombre = generoCreacionDTO.Nombre };
             var genero = _mapper.Map<Genero>(generoCreacionDTO);
+
             _context.Add(genero);
             await _context.SaveChangesAsync();
+            await _outputCacheStore.EvictByTagAsync(cacheTag, default); // limpieza de cache del tag generos
+
             return CreatedAtRoute("ObtenerGeneroPorId", new { id = genero.Id }, genero);
-
         }
 
-        [HttpPut]
-        public void Put()
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Put(int id, [FromBody] GeneroCreacionDTO generoCreacionDTO)
         {
-            throw new NotImplementedException();
+            var generoExiste = await _context.Generos.AnyAsync(g => g.Id == id);
+
+            if(!generoExiste)
+            {
+                return NotFound(new { Error = $"Id: {id} not found" });
+            }
+
+            var genero = _mapper.Map<Genero>(generoCreacionDTO);
+            genero.Id = id;
+
+            _context.Update(genero);
+            await _context.SaveChangesAsync();
+            await _outputCacheStore.EvictByTagAsync(cacheTag, default); // limpieza de cache del tag generos
+
+            return NoContent();
+
+
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
             var genero = await _context.Generos.FindAsync(id);
