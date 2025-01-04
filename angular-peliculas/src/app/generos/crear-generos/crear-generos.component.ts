@@ -20,15 +20,13 @@ export class CrearGenerosComponent {
 
   guardarCambios(genero: GeneroCreacionDTO) {
     this.generosService.crear(genero).subscribe({
-        next: genero => 
+        next: () => 
           { 
-            console.log('creando el genero', genero);
             this.router.navigate(['/generos']);
           },
         error: error => 
         {
           const errores = extraerErrores(error);
-          console.log('error al intentar crear el genero', errores);
           this.errores = errores;
         }
       });
