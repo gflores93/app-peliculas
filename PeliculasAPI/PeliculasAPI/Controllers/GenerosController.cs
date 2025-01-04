@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
 using PeliculasAPI.DTOs;
 using PeliculasAPI.Entidades;
+using PeliculasAPI.Utilidades;
 
 namespace PeliculasAPI.Controllers
 {
@@ -30,11 +31,15 @@ namespace PeliculasAPI.Controllers
 
         [HttpGet]
         [OutputCache(Tags = [cacheTag])]
-        public async Task<ActionResult<List<GeneroDTO>>> Get()
+        public async Task<ActionResult<List<GeneroDTO>>> Get([FromQuery] PaginacionDTO paginacion)
         {
-            // ProjectTo realizar el query sólo con las propiedades de GeneroDTO
-            // así evitamos consultar todas las columnas de la tabla cuando el DTO no contiene todas esas propiedades
-            return await _context.Generos.ProjectTo<GeneroDTO>(_mapper.ConfigurationProvider).ToListAsync();
+            var queryable = _context.Generos;
+            await this.HttpContext.InsertarParametrosPaginacionEnCabecera(queryable); // extension method for HttpContext
+            return await queryable
+                .OrderBy(g => g.Nombre)
+                .Paginar(paginacion) // extension method for IQueryable<T> 
+                .ProjectTo<GeneroDTO>(_mapper.ConfigurationProvider) // only relevant properties used in query
+                .ToListAsync();
         }
 
         [HttpGet("{id}", Name = "ObtenerGeneroPorId")]
