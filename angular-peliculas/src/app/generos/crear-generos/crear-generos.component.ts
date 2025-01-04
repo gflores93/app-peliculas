@@ -3,7 +3,7 @@ import { Router, RouterLink } from '@angular/router';
 import { GeneroCreacionDTO } from '../generos';
 import { FormularioGeneroComponent } from "../formulario-genero/formulario-genero.component";
 import { GenerosService } from '../generos.service';
-import { extraerErrores } from '../../compartidos/componentes/funciones/extraer-errores';
+import { extraerErrores } from '../../compartidos/funciones/extraer-errores';
 import { MostrarErroresComponent } from "../../compartidos/componentes/mostrar-errores/mostrar-errores.component";
 
 @Component({

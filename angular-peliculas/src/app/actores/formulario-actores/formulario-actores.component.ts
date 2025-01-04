@@ -7,7 +7,7 @@ import { RouterLink } from '@angular/router';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActorCreacionDTO, ActorDTO } from '../actores';
 import moment from 'moment';
-import { fechaNoPuedeSerFutura } from '../../compartidos/componentes/funciones/validaciones';
+import { fechaNoPuedeSerFutura } from '../../compartidos/funciones/validaciones';
 import { InputImgComponent } from "../../compartidos/componentes/input-img/input-img.component";
 
 

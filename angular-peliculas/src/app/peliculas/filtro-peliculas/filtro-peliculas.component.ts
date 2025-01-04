@@ -9,7 +9,7 @@ import { ListadoPeliculasComponent } from "../listado-peliculas/listado-pelicula
 import { FiltroPeliculas } from './filtro-peliculas';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { parseBoolean, parseNumber } from '../../compartidos/componentes/funciones/parse-types';
+import { parseBoolean, parseNumber } from '../../compartidos/funciones/parse-types';
 
 
 @Component({
