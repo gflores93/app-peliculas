@@ -10,6 +10,9 @@ appsettings.json
 appsettings.Development.json
 appsettings.Production.json
 
+# static files
+wwwroot/
+
 # Other files to ignore
 bin/
 obj/
