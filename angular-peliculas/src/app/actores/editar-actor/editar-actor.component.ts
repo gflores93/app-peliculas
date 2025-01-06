@@ -1,26 +1,49 @@
-import { Component, Input, numberAttribute } from '@angular/core';
+import { Component, inject, Input, numberAttribute, OnInit } from '@angular/core';
 import { ActorCreacionDTO, ActorDTO } from '../actores';
 import { FormularioActoresComponent } from "../formulario-actores/formulario-actores.component";
+import { ActoresService } from '../actores.service';
+import { Router } from '@angular/router';
+import { extraerErrores } from '../../compartidos/funciones/extraer-errores';
+import { MostrarErroresComponent } from "../../compartidos/componentes/mostrar-errores/mostrar-errores.component";
+import { CargandoComponent } from "../../compartidos/componentes/cargando/cargando.component";
 
 @Component({
   selector: 'app-editar-actor',
-  imports: [FormularioActoresComponent],
+  imports: [FormularioActoresComponent, MostrarErroresComponent, CargandoComponent],
   templateUrl: './editar-actor.component.html',
   styleUrl: './editar-actor.component.css'
 })
-export class EditarActorComponent {
-  @Input({ transform: numberAttribute }) id!: number;
+export class EditarActorComponent implements OnInit {
 
-  actor: ActorDTO = {
-    id: 1,
-    nombre: 'Actor 001',
-    // fechaNacimiento: new Date('1993-12-15') // js transforms date into timezone (e.g. UTC-6)
-    fechaNacimiento: new Date(1993, 11, 15), // months in js are from 0-11
-    foto: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Tom_Holland_by_Gage_Skidmore.jpg/220px-Tom_Holland_by_Gage_Skidmore.jpg'
+  ngOnInit(): void {
+    this.actoresService.obtenerPorId(this.id).subscribe({
+      next: actor => {
+        this.actor = actor;
+      },
+      error: error => {
+        const errores = extraerErrores(error);
+        this.errores = errores;
+      }
+    });
   }
 
+  private actoresService = inject(ActoresService);
+  private router = inject(Router);
+  @Input({ transform: numberAttribute }) id!: number;
+  actor?: ActorDTO;
+  errores: string[] = [];
+
   guardarCambios(actor: ActorCreacionDTO) {
-    console.log('editando actor', actor);
+    this.actoresService.actualizar(this.id, actor as ActorCreacionDTO)
+      .subscribe({
+        next: () => {
+          this.router.navigate(['/actores']);
+        },
+        error: error => {
+          const errores = extraerErrores(error);
+          this.errores = errores;
+        }
+      });
   }
 }
 
