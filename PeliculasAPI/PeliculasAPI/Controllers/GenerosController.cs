@@ -44,13 +44,13 @@ namespace PeliculasAPI.Controllers
 
         [HttpGet("{id:int}", Name = "ObtenerGeneroPorId")]
         [OutputCache(Tags = [cacheTag])]
-        public async Task<ActionResult<GeneroDTO>> Get(int id)
+        public async Task<ActionResult<GeneroDTO>> Get([FromRoute] int id)
         {
             var genero = await _context.Generos
                 .ProjectTo<GeneroDTO>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(g => g.Id == id);
 
-            if (genero == null)
+            if (genero is null)
             {
                 return NotFound(new { Error = $"Id: {id} not found" });
             }
@@ -71,7 +71,7 @@ namespace PeliculasAPI.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> Put(int id, [FromBody] GeneroCreacionDTO generoCreacionDTO)
+        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] GeneroCreacionDTO generoCreacionDTO)
         {
             var generoExiste = await _context.Generos.AnyAsync(g => g.Id == id);
 
@@ -88,18 +88,16 @@ namespace PeliculasAPI.Controllers
             await _outputCacheStore.EvictByTagAsync(cacheTag, default); // limpieza de cache del tag generos
 
             return NoContent();
-
-
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var registrosBorrados = await _context.Generos.Where(g => g.Id == id).ExecuteDeleteAsync();
 
             if (registrosBorrados == 0)
             {
-                return NotFound();
+                return NotFound(new { Error = $"Id: {id} not found" });
             }
 
             await _outputCacheStore.EvictByTagAsync(cacheTag, default); // limpieza de cache del tag generos
