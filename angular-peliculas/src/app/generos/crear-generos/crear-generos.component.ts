@@ -14,6 +14,6 @@ import { SERVICIO_CRUD_TOKEN } from '../../compartidos/proveedores/proveedores';
   ]
 })
 export class CrearGenerosComponent {
-  formularioGeneros = FormularioGeneroComponent; // es una referencia a la clase, no una instancia
+  formularioGenero = FormularioGeneroComponent; // es una referencia a la clase, no una instancia
 }
 

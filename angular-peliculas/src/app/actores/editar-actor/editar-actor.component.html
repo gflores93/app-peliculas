@@ -1,11 +1,1 @@
-<h2>Editar Actores</h2>
-
-@if (actor) 
-{
-    <app-mostrar-errores [errores]="errores"></app-mostrar-errores>
-    <app-formulario-actores [modelo]="actor" (posteoFormulario)="guardarCambios($event)"></app-formulario-actores>
-}
-@else 
-{
-    <app-cargando></app-cargando>
-}
+<app-editar-entidad titulo="Editar Actor" rutaIndice="/actores" [id]="id" [formulario]="formularioActores"></app-editar-entidad>
