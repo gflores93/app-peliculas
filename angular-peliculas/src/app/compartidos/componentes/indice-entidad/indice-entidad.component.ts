@@ -9,6 +9,7 @@ import { RouterLink } from '@angular/router';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { ListadoGenericoComponent } from '../listado-generico/listado-generico.component';
 import { TitleCasePipe } from '@angular/common';
+import { IServicioCRUD } from '../../interfaces/IServicioCRUD';
 
 @Component({
   selector: 'app-indice-entidad',
@@ -16,7 +17,7 @@ import { TitleCasePipe } from '@angular/common';
   templateUrl: './indice-entidad.component.html',
   styleUrl: './indice-entidad.component.css'
 })
-export class IndiceEntidadComponent<TDTO> {
+export class IndiceEntidadComponent<TDTO, TCreacionDTO> {
 
   @Input({ required: true }) titulo!: string;
   @Input({ required: true }) rutaCrear!: string;
@@ -26,7 +27,7 @@ export class IndiceEntidadComponent<TDTO> {
   paginacion: PaginacionDTO = { pagina: 1, recordsPorPagina: 5 };
   cantidadTotalRegistros!: number;
 
-  servicioCRUD = inject(SERVICIO_CRUD_TOKEN) as any;
+  servicioCRUD = inject(SERVICIO_CRUD_TOKEN) as IServicioCRUD<TDTO, TCreacionDTO>;
 
   constructor() {
     this.cargarRegistros();

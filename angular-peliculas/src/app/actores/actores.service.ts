@@ -5,11 +5,12 @@ import { ActorCreacionDTO, ActorDTO } from './actores';
 import { PaginacionDTO } from '../compartidos/modelos/PaginacionDTO';
 import { Observable } from 'rxjs';
 import { construirQueryParams } from '../compartidos/funciones/construirQueryParams';
+import { IServicioCRUD } from '../compartidos/interfaces/IServicioCRUD';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ActoresService {
+export class ActoresService implements IServicioCRUD<ActorDTO, ActorCreacionDTO>{
 
   constructor() { }
   private http = inject(HttpClient);
@@ -24,17 +25,17 @@ export class ActoresService {
     return this.http.get<ActorDTO>(`${this.urlBase}/${id}`);
   }
 
-  public crear(actor: ActorCreacionDTO) {
+  public crear(actor: ActorCreacionDTO): Observable<any> {
     const formData = this.construirFormData(actor);
     return this.http.post(this.urlBase, formData);
   }
 
-  public actualizar(id: number, actor: ActorCreacionDTO) {
+  public actualizar(id: number, actor: ActorCreacionDTO): Observable<any> {
     const formData = this.construirFormData(actor);
     return this.http.put(`${this.urlBase}/${id}`, formData);
   }
 
-  public borrar(id: number) {
+  public borrar(id: number): Observable<any> {
     return this.http.delete(`${this.urlBase}/${id}`);
   }
 
