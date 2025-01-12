@@ -1,32 +1,18 @@
-import { Component, inject } from '@angular/core';
-import { FormularioActoresComponent } from "../formulario-actores/formulario-actores.component";
-import { ActorCreacionDTO } from '../actores';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
 import { ActoresService } from '../actores.service';
-import { extraerErrores } from '../../compartidos/funciones/extraer-errores';
-import { MostrarErroresComponent } from "../../compartidos/componentes/mostrar-errores/mostrar-errores.component";
+import { CrearEntidadComponent } from "../../compartidos/componentes/crear-entidad/crear-entidad.component";
+import { FormularioActoresComponent } from '../formulario-actores/formulario-actores.component';
+import { SERVICIO_CRUD_TOKEN } from '../../compartidos/proveedores/proveedores';
 
 @Component({
   selector: 'app-crear-actor',
-  imports: [FormularioActoresComponent, MostrarErroresComponent],
+  imports: [CrearEntidadComponent],
   templateUrl: './crear-actor.component.html',
-  styleUrl: './crear-actor.component.css'
+  styleUrl: './crear-actor.component.css',
+  providers: [
+    { provide: SERVICIO_CRUD_TOKEN, useClass: ActoresService }
+  ]
 })
 export class CrearActorComponent {
-
-  actoresService = inject(ActoresService);
-  router = inject(Router);
-  errores: string[] = [];
-
-  guardarCambios(actor: ActorCreacionDTO) {
-    this.actoresService.crear(actor).subscribe({
-      next: () => {
-        this.router.navigate(['/actores']);
-      },
-      error: error => {
-        const errores = extraerErrores(error);
-        this.errores = errores;
-      }
-    });
-  }
+  formularioActores = FormularioActoresComponent; // es una referencia a la clase, no una instancia
 }
