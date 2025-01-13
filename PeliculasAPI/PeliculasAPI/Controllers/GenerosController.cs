@@ -1,60 +1,44 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
 using PeliculasAPI.DTOs;
 using PeliculasAPI.Entidades;
-using PeliculasAPI.Utilidades;
 
 namespace PeliculasAPI.Controllers
 {
     [Route("api/generos")]
     [ApiController]
-    public class GenerosController : ControllerBase
+    public class GenerosController : CustomBaseController
     {
-        private readonly IOutputCacheStore _outputCacheStore;
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IOutputCacheStore _outputCacheStore;
         private const string cacheTag = "generos";
 
         public GenerosController(
-            IOutputCacheStore outputCacheStore,
             ApplicationDbContext context,
-            IMapper mapper
-        )
+            IOutputCacheStore outputCacheStore,
+            IMapper mapper)
+            : base(context, mapper)
         {
-            _outputCacheStore = outputCacheStore;
             _context = context;
             _mapper = mapper;
+            _outputCacheStore = outputCacheStore;
         }
 
         [HttpGet]
         [OutputCache(Tags = [cacheTag])]
-        public async Task<ActionResult<List<GeneroDTO>>> Get([FromQuery] PaginacionDTO paginacion)
+        public async Task<List<GeneroDTO>> Get([FromQuery] PaginacionDTO paginacion)
         {
-            var queryable = _context.Generos;
-            await this.HttpContext.InsertarParametrosPaginacionEnCabecera(queryable); // extension method for HttpContext
-            return await queryable
-                .OrderBy(g => g.Nombre)
-                .Paginar(paginacion) // extension method for IQueryable<T> 
-                .ProjectTo<GeneroDTO>(_mapper.ConfigurationProvider) // only relevant properties used in query
-                .ToListAsync();
+            return await base.Get<Genero, GeneroDTO>(paginacion, ordenarPor: g => g.Nombre);
         }
 
         [HttpGet("{id:int}", Name = "ObtenerGeneroPorId")]
         [OutputCache(Tags = [cacheTag])]
         public async Task<ActionResult<GeneroDTO>> Get([FromRoute] int id)
         {
-            var genero = await _context.Generos
-                .ProjectTo<GeneroDTO>(_mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(g => g.Id == id);
-
-            if (genero is null)
-            {
-                return NotFound(new { Error = $"Id: {id} not found" });
-            }
-            return genero;
+            return await base.Get<Genero, GeneroDTO>(id);
         }
 
         [HttpPost]
@@ -75,7 +59,7 @@ namespace PeliculasAPI.Controllers
         {
             var generoExiste = await _context.Generos.AnyAsync(g => g.Id == id);
 
-            if(!generoExiste)
+            if (!generoExiste)
             {
                 return NotFound(new { Error = $"Id: {id} not found" });
             }

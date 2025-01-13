@@ -1,18 +1,16 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
 using PeliculasAPI.DTOs;
 using PeliculasAPI.Entidades;
 using PeliculasAPI.Servicios;
-using PeliculasAPI.Utilidades;
 
 namespace PeliculasAPI.Controllers
 {
     [Route("api/actores")]
     [ApiController]
-    public class ActoresController : ControllerBase
+    public class ActoresController : CustomBaseController
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -22,10 +20,12 @@ namespace PeliculasAPI.Controllers
         private readonly string contenedor = "actores";
 
 
-        public ActoresController(ApplicationDbContext context,
-            IMapper mapper, 
+        public ActoresController(
+            ApplicationDbContext context,
+            IMapper mapper,
             IOutputCacheStore outputCacheStore,
             IAlmacenadorArchivos almacenadorArchivos)
+            : base(context, mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -37,29 +37,15 @@ namespace PeliculasAPI.Controllers
         [OutputCache(Tags = [cacheTag])]
         public async Task<List<ActorDTO>> Get([FromQuery] PaginacionDTO paginacion)
         {
-            var queryable = _context.Actores;
-            await HttpContext.InsertarParametrosPaginacionEnCabecera(queryable);
-            return await queryable
-                .OrderBy(a => a.Nombre)
-                .Paginar(paginacion)
-                .ProjectTo<ActorDTO>(_mapper.ConfigurationProvider)
-                .ToListAsync();
-        }
+            return await Get<Actor, ActorDTO>(paginacion, ordenarPor: g => g.Nombre);
 
+        }
 
         [HttpGet("{id:int}", Name = "ObtenerActorPorId")]
         [OutputCache(Tags = [cacheTag])]
         public async Task<ActionResult<ActorDTO>> Get([FromRoute] int id)
         {
-            var actor = await _context.Actores
-                .ProjectTo<ActorDTO>(_mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(a => a.Id == id);
-
-            if (actor is null)
-            {
-                return NotFound(new { Error = $"Id: {id} not found" });
-            }
-            return actor;
+            return await base.Get<Actor, ActorDTO>(id);
         }
 
         [HttpPost]
@@ -108,6 +94,7 @@ namespace PeliculasAPI.Controllers
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
+            // TODO: DELETE Files from AlmacenadorArchivos
             var registrosBorrados = await _context.Actores.Where(a => a.Id == id).ExecuteDeleteAsync();
 
             if (registrosBorrados == 0)
