@@ -20,7 +20,7 @@ namespace PeliculasAPI.Controllers
             ApplicationDbContext context,
             IOutputCacheStore outputCacheStore,
             IMapper mapper)
-            : base(context, mapper)
+            : base(context, mapper, outputCacheStore, cacheTag)
         {
             _context = context;
             _mapper = mapper;
@@ -44,48 +44,19 @@ namespace PeliculasAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] GeneroCreacionDTO generoCreacionDTO)
         {
-            //var genero = new Genero { Nombre = generoCreacionDTO.Nombre };
-            var genero = _mapper.Map<Genero>(generoCreacionDTO);
-
-            _context.Add(genero);
-            await _context.SaveChangesAsync();
-            await _outputCacheStore.EvictByTagAsync(cacheTag, default); // limpieza de cache del tag generos
-
-            return CreatedAtRoute("ObtenerGeneroPorId", new { id = genero.Id }, genero);
+            return await base.Post<GeneroCreacionDTO, Genero, GeneroDTO>(generoCreacionDTO, "ObtenerGeneroPorId");
         }
 
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Put([FromRoute] int id, [FromBody] GeneroCreacionDTO generoCreacionDTO)
         {
-            var generoExiste = await _context.Generos.AnyAsync(g => g.Id == id);
-
-            if (!generoExiste)
-            {
-                return NotFound(new { Error = $"Id: {id} not found" });
-            }
-
-            var genero = _mapper.Map<Genero>(generoCreacionDTO);
-            genero.Id = id;
-
-            _context.Update(genero);
-            await _context.SaveChangesAsync();
-            await _outputCacheStore.EvictByTagAsync(cacheTag, default); // limpieza de cache del tag generos
-
-            return NoContent();
+            return await base.Put<GeneroCreacionDTO, Genero>(id, generoCreacionDTO);
         }
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var registrosBorrados = await _context.Generos.Where(g => g.Id == id).ExecuteDeleteAsync();
-
-            if (registrosBorrados == 0)
-            {
-                return NotFound(new { Error = $"Id: {id} not found" });
-            }
-
-            await _outputCacheStore.EvictByTagAsync(cacheTag, default); // limpieza de cache del tag generos
-            return NoContent();
+            return await base.Delete<Genero>(id);
         }
 
     }

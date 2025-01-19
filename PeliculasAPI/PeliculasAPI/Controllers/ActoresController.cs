@@ -25,7 +25,7 @@ namespace PeliculasAPI.Controllers
             IMapper mapper,
             IOutputCacheStore outputCacheStore,
             IAlmacenadorArchivos almacenadorArchivos)
-            : base(context, mapper)
+            : base(context, mapper, outputCacheStore, cacheTag)
         {
             _context = context;
             _mapper = mapper;
@@ -37,7 +37,7 @@ namespace PeliculasAPI.Controllers
         [OutputCache(Tags = [cacheTag])]
         public async Task<List<ActorDTO>> Get([FromQuery] PaginacionDTO paginacion)
         {
-            return await Get<Actor, ActorDTO>(paginacion, ordenarPor: g => g.Nombre);
+            return await base.Get<Actor, ActorDTO>(paginacion, ordenarPor: g => g.Nombre);
 
         }
 
@@ -95,15 +95,7 @@ namespace PeliculasAPI.Controllers
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             // TODO: DELETE Files from AlmacenadorArchivos
-            var registrosBorrados = await _context.Actores.Where(a => a.Id == id).ExecuteDeleteAsync();
-
-            if (registrosBorrados == 0)
-            {
-                return NotFound(new { Error = $"Id: {id} not found" });
-            }
-
-            await _outputCacheStore.EvictByTagAsync(cacheTag, default);
-            return NoContent();
+            return await base.Delete<Actor>(id);
         }
 
     }
