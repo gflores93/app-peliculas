@@ -1,17 +1,18 @@
 import { Component } from '@angular/core';
+import { CinesService } from '../cines.service';
+import { SERVICIO_CRUD_TOKEN } from '../../compartidos/proveedores/proveedores';
 import { FormularioCinesComponent } from "../formulario-cines/formulario-cines.component";
-import { CineCreacionDTO } from '../cines';
+import { CrearEntidadComponent } from "../../compartidos/componentes/crear-entidad/crear-entidad.component";
 
 @Component({
   selector: 'app-crear-cine',
-  imports: [FormularioCinesComponent],
+  imports: [CrearEntidadComponent],
   templateUrl: './crear-cine.component.html',
-  styleUrl: './crear-cine.component.css'
+  styleUrl: './crear-cine.component.css',
+  providers: [
+    { provide: SERVICIO_CRUD_TOKEN, useClass: CinesService }
+  ]
 })
 export class CrearCineComponent {
-
-  guardarCambios(cine: CineCreacionDTO) {
-    console.log('creando cine', cine);
-  }
-
+  formularioCine = FormularioCinesComponent; // es una referencia a la clase, no una instancia
 }
