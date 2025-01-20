@@ -1,22 +1,21 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
-using Microsoft.EntityFrameworkCore;
 using PeliculasAPI.DTOs;
 using PeliculasAPI.Entidades;
 
 namespace PeliculasAPI.Controllers
 {
-    [Route("api/generos")]
+    [Route("api/cines")]
     [ApiController]
-    public class GenerosController : CustomBaseController
+    public class CinesController : CustomBaseController
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly IOutputCacheStore _outputCacheStore;
-        private const string cacheTag = "generos";
+        private const string cacheTag = "cines";
 
-        public GenerosController(
+        public CinesController(
             ApplicationDbContext context,
             IMapper mapper,
             IOutputCacheStore outputCacheStore)
@@ -29,34 +28,34 @@ namespace PeliculasAPI.Controllers
 
         [HttpGet]
         [OutputCache(Tags = [cacheTag])]
-        public async Task<List<GeneroDTO>> Get([FromQuery] PaginacionDTO paginacion)
+        public async Task<List<CineDTO>> Get([FromQuery] PaginacionDTO paginacion)
         {
-            return await base.Get<Genero, GeneroDTO>(paginacion, ordenarPor: g => g.Nombre);
+            return await base.Get<Cine, CineDTO>(paginacion, ordenarPor: c => c.Nombre);
         }
 
-        [HttpGet("{id:int}", Name = "ObtenerGeneroPorId")]
+        [HttpGet("{id:int}", Name = "ObtenerCinePorId")]
         [OutputCache(Tags = [cacheTag])]
-        public async Task<ActionResult<GeneroDTO>> Get([FromRoute] int id)
+        public async Task<ActionResult<CineDTO>> Get([FromRoute] int id)
         {
-            return await base.Get<Genero, GeneroDTO>(id);
+            return await base.Get<Cine, CineDTO>(id);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] GeneroCreacionDTO generoCreacionDTO)
+        public async Task<IActionResult> Post([FromBody] CineCreacionDTO cineCreacionDTO)
         {
-            return await base.Post<GeneroCreacionDTO, Genero, GeneroDTO>(generoCreacionDTO, "ObtenerGeneroPorId");
+            return await base.Post<CineCreacionDTO, Cine, CineDTO>(cineCreacionDTO, "ObtenerCinePorId");
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] GeneroCreacionDTO generoCreacionDTO)
+        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] CineCreacionDTO cineCreacionDTO)
         {
-            return await base.Put<GeneroCreacionDTO, Genero>(id, generoCreacionDTO);
+            return await base.Put<CineCreacionDTO, Cine>(id, cineCreacionDTO);
         }
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            return await base.Delete<Genero>(id);
+            return await base.Delete<Cine>(id);
         }
 
     }
