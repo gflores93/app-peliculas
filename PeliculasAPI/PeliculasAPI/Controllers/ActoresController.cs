@@ -18,8 +18,6 @@ namespace PeliculasAPI.Controllers
         private readonly IAlmacenadorArchivos _almacenadorArchivos;
         private const string cacheTag = "actores";
         private readonly string contenedor = "actores";
-
-
         public ActoresController(
             ApplicationDbContext context,
             IMapper mapper,

@@ -14,7 +14,6 @@ namespace PeliculasAPI.Controllers
         private readonly IMapper _mapper;
         private readonly IOutputCacheStore _outputCacheStore;
         private const string cacheTag = "cines";
-
         public CinesController(
             ApplicationDbContext context,
             IMapper mapper,

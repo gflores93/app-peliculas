@@ -15,7 +15,6 @@ namespace PeliculasAPI.Controllers
         private readonly IMapper _mapper;
         private readonly IOutputCacheStore _outputCacheStore;
         private const string cacheTag = "generos";
-
         public GenerosController(
             ApplicationDbContext context,
             IMapper mapper,
