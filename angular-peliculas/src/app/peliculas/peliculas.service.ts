@@ -18,15 +18,6 @@ export class PeliculasService {
     return this.http.get<PeliculasPostGetDTO>(`${this.urlBase}/postget`);
   }
 
-  // public obtenerPaginado(paginacion: PaginacionDTO): Observable<HttpResponse<ActorDTO[]>> {
-  //   let queryParams = construirQueryParams(paginacion);
-  //   return this.http.get<ActorDTO[]>(this.urlBase, { params: queryParams, observe: 'response' });
-  // }
-
-  // public obtenerPorId(id: number): Observable<ActorDTO> {
-  //   return this.http.get<ActorDTO>(`${this.urlBase}/${id}`);
-  // }
-
   public crear(pelicula: PeliculaCreacionDTO): Observable<PeliculaDTO> {
     const formData = this.construirFormData(pelicula);
     return this.http.post<PeliculaDTO>(this.urlBase, formData);
