@@ -9,7 +9,8 @@ using PeliculasAPI.Servicios;
 
 namespace PeliculasAPI.Controllers
 {
-
+    [Route("api/peliculas")]
+    [ApiController]
     public class PeliculasController : CustomBaseController
     {
         private readonly ApplicationDbContext _context;
@@ -73,6 +74,7 @@ namespace PeliculasAPI.Controllers
 
         private void AsignarOrdenActores(Pelicula pelicula)
         {
+            // should have been assigned in the mapper PeliculaCreacionDTO to Pelicula
             if (pelicula.PeliculasActores is not null)
             {
                 for (int i = 0; i < pelicula.PeliculasActores.Count(); i++)
