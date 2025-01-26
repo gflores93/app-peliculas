@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
@@ -44,6 +45,14 @@ namespace PeliculasAPI.Controllers
         public async Task<ActionResult<ActorDTO>> Get([FromRoute] int id)
         {
             return await base.Get<Actor, ActorDTO>(id);
+        }
+
+        [HttpGet("{nombre}")]
+        public async Task<ActionResult<List<PeliculaActorDTO>>> Get(string nombre)
+        {
+            return await _context.Actores.Where(a => a.Nombre.Contains(nombre))
+                .ProjectTo<PeliculaActorDTO>(_mapper.ConfigurationProvider)
+                .ToListAsync();
         }
 
         [HttpPost]
