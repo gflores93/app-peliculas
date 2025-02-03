@@ -12,8 +12,14 @@ import { PeliculaDTO } from '../peliculas/peliculas';
 export class LandingPageComponent {
 
   peliculasService = inject(PeliculasService);
- 
+
   constructor() {
+    this.cargarPeliculas();
+  }
+  peliculasEnCines!: PeliculaDTO[];
+  peliculasProximosEstrenos!: PeliculaDTO[];
+
+  cargarPeliculas() {
     this.peliculasService.obtenerLandingPage().subscribe({
       next: modelo => {
         this.peliculasEnCines = modelo.enCines;
@@ -24,7 +30,9 @@ export class LandingPageComponent {
       }
     });
   }
-  peliculasEnCines!: PeliculaDTO[];
-  peliculasProximosEstrenos!: PeliculaDTO[];
 
+  peliculaBorrada() {
+    this.cargarPeliculas();
+  }
+  
 }

@@ -36,9 +36,9 @@ export class PeliculasService {
     return this.http.put(`${this.urlBase}/${id}`, formData);
   }
 
-  // public borrar(id: number): Observable<any> {
-  //   return this.http.delete(`${this.urlBase}/${id}`);
-  // }
+  public borrar(id: number): Observable<any> {
+    return this.http.delete(`${this.urlBase}/${id}`);
+  }
 
   private construirFormData(pelicula: PeliculaCreacionDTO): FormData {
     const formData = new FormData();
