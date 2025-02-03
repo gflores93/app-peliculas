@@ -174,6 +174,11 @@ namespace PeliculasAPI.Controllers
             return NoContent();
         }
 
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            return await base.Delete<Pelicula>(id);
+        }
 
         private void AsignarOrdenActores(Pelicula pelicula)
         {
