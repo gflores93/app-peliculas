@@ -14,7 +14,7 @@
 
     </mat-form-field>
 
-    @if(actoresSeleccionados.length > 0) {
+    @if(actoresSeleccionados && actoresSeleccionados.length > 0) {
         <table mat-table [dataSource]="actoresSeleccionados" class="mat-elevation-z8" 
         cdkDropList [cdkDropListData]="actoresSeleccionados"
         (cdkDropListDropped)="finalizarArrastre($event)">

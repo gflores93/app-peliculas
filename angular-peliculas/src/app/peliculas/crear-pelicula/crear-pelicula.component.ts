@@ -40,8 +40,7 @@ export class CrearPeliculaComponent {
 
   guardarCambios(pelicula: PeliculaCreacionDTO) {
     this.peliculasService.crear(pelicula).subscribe({
-      next: pelicula =>  {
-        console.log(pelicula);
+      next: () =>  {
         this.router.navigate(['/']);
       },
       error: error => {

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { LandingPageDTO, PeliculaCreacionDTO, PeliculaDTO, PeliculasPostGetDTO } from './peliculas';
+import { LandingPageDTO, PeliculaCreacionDTO, PeliculaDTO, PeliculasPostGetDTO, PeliculasPutGetDTO } from './peliculas';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -27,10 +27,14 @@ export class PeliculasService {
     return this.http.post<PeliculaDTO>(this.urlBase, formData);
   }
 
-  // public actualizar(id: number, actor: ActorCreacionDTO): Observable<any> {
-  //   const formData = this.construirFormData(actor);
-  //   return this.http.put(`${this.urlBase}/${id}`, formData);
-  // }
+  public actualizarGet(id: number): Observable<PeliculasPutGetDTO> {
+    return this.http.get<PeliculasPutGetDTO>(`${this.urlBase}/putget/${id}`);
+  }
+
+  public actualizar(id: number, pelicula: PeliculaCreacionDTO): Observable<any> {
+    const formData = this.construirFormData(pelicula);
+    return this.http.put(`${this.urlBase}/${id}`, formData);
+  }
 
   // public borrar(id: number): Observable<any> {
   //   return this.http.delete(`${this.urlBase}/${id}`);
