@@ -29,9 +29,9 @@ export class ActoresService implements IServicioCRUD<ActorDTO, ActorCreacionDTO>
     return this.http.get<ActorAutocompleteDTO[]>(`${this.urlBase}/${nombre}`);
   }
 
-  public crear(actor: ActorCreacionDTO): Observable<any> {
+  public crear(actor: ActorCreacionDTO): Observable<ActorDTO> {
     const formData = this.construirFormData(actor);
-    return this.http.post(this.urlBase, formData);
+    return this.http.post<ActorDTO>(this.urlBase, formData);
   }
 
   public actualizar(id: number, actor: ActorCreacionDTO): Observable<any> {

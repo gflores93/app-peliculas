@@ -5,7 +5,7 @@ import { PaginacionDTO } from "../modelos/PaginacionDTO"
 export interface IServicioCRUD<TDTO, TCreacionDTO> {
       obtenerPaginado(paginacion: PaginacionDTO): Observable<HttpResponse<TDTO[]>>;
       obtenerPorId(id: number) : Observable<TDTO>;
-      crear(entidad: TCreacionDTO): Observable<any>;
+      crear(entidad: TCreacionDTO): Observable<TDTO>;
       actualizar(id: number, entidad: TCreacionDTO): Observable<any>;
       borrar(id: number): Observable<any>;
 }

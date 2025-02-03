@@ -25,8 +25,8 @@ export class CinesService implements IServicioCRUD<CineDTO, CineCreacionDTO> {
   obtenerPorId(id: number): Observable<CineDTO> {
     return this.http.get<CineDTO>(`${this.urlBase}/${id}`);
   }
-  crear(cine: CineCreacionDTO): Observable<any> {
-    return this.http.post(this.urlBase, cine);
+  crear(cine: CineCreacionDTO): Observable<CineDTO> {
+    return this.http.post<CineDTO>(this.urlBase, cine);
   }
   actualizar(id: number, cine: CineCreacionDTO): Observable<any> {
     return this.http.put(`${this.urlBase}/${id}`, cine);
