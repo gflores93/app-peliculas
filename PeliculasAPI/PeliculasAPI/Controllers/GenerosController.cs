@@ -33,6 +33,13 @@ namespace PeliculasAPI.Controllers
             return await base.Get<Genero, GeneroDTO>(paginacion, ordenarPor: g => g.Nombre);
         }
 
+        [HttpGet("todos")]
+        [OutputCache(Tags = [cacheTag])]
+        public async Task<List<GeneroDTO>> Get()
+        {
+            return await base.Get<Genero, GeneroDTO>(ordenarPor: g => g.Nombre);
+        }
+
         [HttpGet("{id:int}", Name = "ObtenerGeneroPorId")]
         [OutputCache(Tags = [cacheTag])]
         public async Task<ActionResult<GeneroDTO>> Get([FromRoute] int id)
