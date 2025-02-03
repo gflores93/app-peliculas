@@ -22,3 +22,7 @@ p {
 button {
     margin-left: 1rem;
 }
+
+a {
+    text-decoration: none;
+}

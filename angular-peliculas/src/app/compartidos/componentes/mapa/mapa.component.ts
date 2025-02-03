@@ -16,6 +16,11 @@ export class MapaComponent implements OnInit {
       const marcador = marker([valor.latitud, valor.longitud], this.markerOptions);
       this.initLat = valor.latitud;
       this.initLong = valor.longitud;
+
+      if (valor.texto) {
+        marcador.bindPopup(valor.texto, {autoClose: false, autoPan: false});
+      }
+      
       return marcador;
     });
 
@@ -31,6 +36,7 @@ export class MapaComponent implements OnInit {
     };
   }
 
+  @Input() soloLectura = false;
   @Input() coordenadasIniciales: Coordenada[] = [];
   @Output() coordenadaSeleccionada = new EventEmitter<Coordenada>();
 
@@ -51,6 +57,11 @@ export class MapaComponent implements OnInit {
   initLong: number = 11.00551064129947
 
   manejarClick(event: LeafletMouseEvent) {
+
+    if (this.soloLectura) {
+      return;
+    }
+    
     const latitud = event.latlng.lat;
     const longitud = event.latlng.lng;
 
