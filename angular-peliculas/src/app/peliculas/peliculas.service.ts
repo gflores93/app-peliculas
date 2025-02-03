@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { LandingPageDTO, PeliculaCreacionDTO, PeliculaDTO, PeliculasPostGetDTO, PeliculasPutGetDTO } from './peliculas';
@@ -20,6 +20,11 @@ export class PeliculasService {
 
   public obtenerPorId(id: number): Observable<PeliculaDTO> {
     return this.http.get<PeliculaDTO>(`${this.urlBase}/${id}`);
+  }
+
+  public filtrar(valores: any) : Observable<HttpResponse<PeliculaDTO[]>> {
+    const params = new HttpParams({fromObject: valores});
+    return this.http.get<PeliculaDTO[]>(`${this.urlBase}/filtrar`, {params: params, observe: 'response'});
   }
 
   public crearGet(): Observable<PeliculasPostGetDTO> {
