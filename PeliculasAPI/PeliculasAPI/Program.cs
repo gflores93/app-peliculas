@@ -1,10 +1,13 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using NetTopologySuite;
 using NetTopologySuite.Geometries;
 using PeliculasAPI;
 using PeliculasAPI.Servicios;
 using PeliculasAPI.Utilidades;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +25,29 @@ builder.Services.AddSingleton(proveedor => new MapperConfiguration(configuracion
     var geometryFactory = proveedor.GetRequiredService<GeometryFactory>();
     configuracion.AddProfile(new AutoMapperProfiles(geometryFactory));
 }).CreateMapper());
+
+// Identity configuration
+builder.Services.AddIdentityCore<IdentityUser>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.AddScoped<UserManager<IdentityUser>>(); // para gestionar usuarios
+builder.Services.AddScoped<SignInManager<IdentityUser>>(); // para loguear al usuario
+
+builder.Services.AddAuthentication().AddJwtBearer(opciones =>
+{
+    opciones.MapInboundClaims = false; // evitar que asp cambie los nombres de los claims
+
+    opciones.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true, // validar llave privada
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["llavejwt"])),
+        ClockSkew = TimeSpan.Zero
+    };
+});
 
 // builder.Configuration.GetConnectionString("DefaultConnection")
 builder.Services.AddDbContext<ApplicationDbContext>(opciones =>
