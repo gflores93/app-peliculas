@@ -44,7 +44,7 @@ builder.Services.AddAuthentication().AddJwtBearer(opciones =>
         ValidateAudience = false,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true, // validar llave privada
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["llavejwt"])),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["llavejwt"]!)),
         ClockSkew = TimeSpan.Zero
     };
 });
