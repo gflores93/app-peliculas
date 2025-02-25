@@ -16,25 +16,33 @@ export class SeguridadService {
   private readonly llaveToken = 'token';
   private readonly llaveExpiracion = 'token-expiracion';
 
-  registrar(credenciales: CredencialesUsuarioDTO) : Observable<RespuestaAutenticacionDTO> {
+  registrar(credenciales: CredencialesUsuarioDTO): Observable<RespuestaAutenticacionDTO> {
     return this.http.post<RespuestaAutenticacionDTO>(`${this.urlBase}/registrar`, credenciales)
-    .pipe(
-      tap(respuestaAtuenticacion => this.guardarToken(respuestaAtuenticacion))
-    );
+      .pipe(
+        tap(respuestaAtuenticacion => this.guardarToken(respuestaAtuenticacion))
+      );
   }
 
-  login(credenciales: CredencialesUsuarioDTO) : Observable<RespuestaAutenticacionDTO> {
+  login(credenciales: CredencialesUsuarioDTO): Observable<RespuestaAutenticacionDTO> {
     return this.http.post<RespuestaAutenticacionDTO>(`${this.urlBase}/login`, credenciales)
-    .pipe(
-      tap(respuestaAtuenticacion => this.guardarToken(respuestaAtuenticacion))
-    );
+      .pipe(
+        tap(respuestaAtuenticacion => this.guardarToken(respuestaAtuenticacion))
+      );
   }
 
   guardarToken(respuestaAutenticacion: RespuestaAutenticacionDTO) {
     localStorage.setItem(this.llaveToken, respuestaAutenticacion.token);
     localStorage.setItem(this.llaveExpiracion, respuestaAutenticacion.expiracion.toString());
   }
-  
+
+  obtenerCampoJWT(campo: string): string {
+    const token = localStorage.getItem(this.llaveToken);
+    if (!token) { return '' }
+    // segunda parte de Token contiene los claims
+    var dataToken = JSON.parse(atob(token.split('.')[1])); 
+    return dataToken[campo];
+  }
+
   estaLogueado(): boolean {
     const token = localStorage.getItem(this.llaveToken);
     if (!token) {
