@@ -7,10 +7,14 @@ import { RouterLink } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Coordenada } from '../../compartidos/componentes/mapa/coordenada';
 import { MapaComponent } from "../../compartidos/componentes/mapa/mapa.component";
+import { RatingService } from '../../rating/rating.service';
+import Swal from 'sweetalert2';
+import { SeguridadService } from '../../seguridad/seguridad.service';
+import { RatingComponent } from "../../compartidos/componentes/rating/rating.component";
 
 @Component({
   selector: 'app-detalle-pelicula',
-  imports: [CargandoComponent, MatChipsModule, RouterLink, MapaComponent],
+  imports: [CargandoComponent, MatChipsModule, RouterLink, MapaComponent, RatingComponent],
   templateUrl: './detalle-pelicula.component.html',
   styleUrl: './detalle-pelicula.component.css'
 })
@@ -32,6 +36,8 @@ export class DetallePeliculaComponent implements OnInit {
   @Input({transform: numberAttribute}) id!: number;
   pelicula!: PeliculaDTO;
   peliculasService = inject(PeliculasService);
+  ratingService = inject(RatingService);
+  seguridadService = inject(SeguridadService);
   // para permitir regresar una URL fuera del dominio valida
   sanitizer = inject(DomSanitizer);
   trailerURL!: SafeResourceUrl;
@@ -49,6 +55,17 @@ generarURLYoutubeEmbed(url: string): SafeResourceUrl | string {
   }
 
   return this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${videoId}`)
+}
+
+puntuar(puntuacion: number) {
+  if(!this.seguridadService.estaLogueado()) {
+    Swal.fire('Error', 'Debes loguearte para poder votar por una pelicula', 'error');
+    return;
+  }
+
+  this.ratingService.puntuar(this.id, puntuacion).subscribe(() => {
+    Swal.fire('Exitoso', 'Su voto ha sido recibido', 'success');
+  });
 }
 
 }
