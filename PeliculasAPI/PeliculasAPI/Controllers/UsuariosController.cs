@@ -91,7 +91,7 @@ namespace PeliculasAPI.Controllers
             var llave = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.configuration["llavejwt"]!));
             var creds = new SigningCredentials(llave, SecurityAlgorithms.HmacSha256);
 
-            var expiracion = DateTime.UtcNow.AddHours(1);
+            var expiracion = DateTime.UtcNow.AddHours(12);
 
             var tokenDeSeguridad = new JwtSecurityToken(issuer: null, audience: null, claims: claims,
                 expires: expiracion, signingCredentials: creds);

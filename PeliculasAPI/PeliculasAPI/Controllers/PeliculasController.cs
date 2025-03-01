@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
@@ -12,12 +14,14 @@ namespace PeliculasAPI.Controllers
 {
     [Route("api/peliculas")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PeliculasController : CustomBaseController
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly IOutputCacheStore _outputCacheStore;
         private readonly IAlmacenadorArchivos _almacenadorArchivos;
+        private readonly IServicioUsuarios _servicioUsuarios;
         private const string cacheTag = "peliculas";
         private readonly string contenedor = "peliculas";
 
@@ -25,17 +29,20 @@ namespace PeliculasAPI.Controllers
             ApplicationDbContext context,
             IMapper mapper,
             IOutputCacheStore outputCacheStore,
-            IAlmacenadorArchivos almacenadorArchivos)
+            IAlmacenadorArchivos almacenadorArchivos,
+            IServicioUsuarios servicioUsuarios)
             : base(context, mapper, outputCacheStore, cacheTag)
         {
             _context = context;
             _mapper = mapper;
             _outputCacheStore = outputCacheStore;
             _almacenadorArchivos = almacenadorArchivos;
+            _servicioUsuarios = servicioUsuarios;
         }
 
         [HttpGet("landing")]
         [OutputCache(Tags = [cacheTag])]
+        [AllowAnonymous]
         public async Task<ActionResult<LandingPageDTO>> Get()
         {
             var top = 6;
@@ -63,7 +70,8 @@ namespace PeliculasAPI.Controllers
         }
 
         [HttpGet("{id:int}", Name = "ObtenerPeliculaPorId")]
-        [OutputCache(Tags = [cacheTag])]
+        [AllowAnonymous]
+        //[OutputCache(Tags = [cacheTag])] // removed to be able to reflect ratings right after modifying them
         public async Task<ActionResult<PeliculaDetallesDTO>> Get([FromRoute] int id)
         {
             var pelicula = await _context.Peliculas
@@ -75,10 +83,36 @@ namespace PeliculasAPI.Controllers
                 return NotFound(new { Error = $"Id: {id} not found" });
             }
 
+            var promedioVoto = 0.0;
+            var usuarioVoto = 0;
+
+            if (await _context.RatingPeliculas.AnyAsync(r => r.PeliculaId == id))
+            {
+                promedioVoto = await _context.RatingPeliculas.Where(r => r.PeliculaId == id)
+                    .AverageAsync(r => r.Puntuacion);
+
+                if (HttpContext.User.Identity!.IsAuthenticated)
+                {
+                    var usuarioId = await _servicioUsuarios.ObtenerUsuarioId();
+
+                    var ratingDB = await _context.RatingPeliculas
+                        .FirstOrDefaultAsync(r => r.UsuarioId == usuarioId && r.PeliculaId == id);
+
+                    if (ratingDB is not null)
+                    {
+                        usuarioVoto = ratingDB.Puntuacion;
+                    }
+                }
+            }
+
+            pelicula.PromedioVoto = promedioVoto;
+            pelicula.VotoUsuario = usuarioVoto;
+
             return pelicula;
         }
 
         [HttpGet("filtrar")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<PeliculaDTO>>> Filtrar([FromQuery] PeliculasFiltrarDTO peliculasFiltrarDTO)
         {
             var peliculasQueryable = _context.Peliculas.AsQueryable();
