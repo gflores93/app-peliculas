@@ -43,6 +43,10 @@ export class SeguridadService {
     return dataToken[campo];
   }
 
+  obtenerToken(): string | null {
+    return localStorage.getItem(this.llaveToken);
+  }
+  
   estaLogueado(): boolean {
     const token = localStorage.getItem(this.llaveToken);
     if (!token) {
