@@ -14,7 +14,7 @@ namespace PeliculasAPI.Controllers
 {
     [Route("api/peliculas")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "esadmin")]
     public class PeliculasController : CustomBaseController
     {
         private readonly ApplicationDbContext _context;

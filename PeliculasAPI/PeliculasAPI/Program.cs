@@ -49,6 +49,11 @@ builder.Services.AddAuthentication().AddJwtBearer(opciones =>
     };
 });
 
+builder.Services.AddAuthorization(opciones =>
+{
+    opciones.AddPolicy("esadmin", politica => politica.RequireClaim("esadmin"));
+});
+
 // builder.Configuration.GetConnectionString("DefaultConnection")
 builder.Services.AddDbContext<ApplicationDbContext>(opciones =>
 opciones.UseSqlServer("name=DefaultConnection", // EF shorthand to search for DefaultConnection
@@ -97,6 +102,7 @@ app.UseCors();
 
 app.UseOutputCache();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
