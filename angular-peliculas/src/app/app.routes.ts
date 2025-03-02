@@ -16,6 +16,7 @@ import { DetallePeliculaComponent } from './peliculas/detalle-pelicula/detalle-p
 import { LoginComponent } from './seguridad/login/login.component';
 import { esAdminGuard } from './compartidos/guards/es-admin.guard';
 import { RegistroComponent } from './seguridad/registro/registro.component';
+import { IndiceUsuariosComponent } from './seguridad/indice-usuarios/indice-usuarios.component';
 
 export const routes: Routes = [
     { path: '', component: LandingPageComponent },
@@ -39,6 +40,7 @@ export const routes: Routes = [
 
     { path: 'login', component: LoginComponent},
     { path: 'registrar', component: RegistroComponent},
+    { path: 'usuarios', component: IndiceUsuariosComponent, canActivate: [esAdminGuard]},
 
     {path: '**', redirectTo: ''}
 ];

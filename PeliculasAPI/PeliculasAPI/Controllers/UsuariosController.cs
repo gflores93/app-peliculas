@@ -16,7 +16,7 @@ namespace PeliculasAPI.Controllers
 {
     [Route("api/usuarios")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "esadmin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "esadmin")]
     public class UsuariosController : ControllerBase
     {
         private readonly UserManager<IdentityUser> userManager;
@@ -106,7 +106,13 @@ namespace PeliculasAPI.Controllers
                 return NotFound();
             }
 
-            await userManager.AddClaimAsync(usuario, new Claim("esadmin", "true"));
+            var existingClaims = await userManager.GetClaimsAsync(usuario);
+            var claimExists = existingClaims.Any(c => c.Type == "esadmin" && c.Value == "true");
+
+            if (!claimExists)
+            {
+                await userManager.AddClaimAsync(usuario, new Claim("esadmin", "true"));
+            }
             return NoContent();
         }
 
