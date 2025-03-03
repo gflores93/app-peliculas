@@ -30,6 +30,11 @@ obj/
 *.sln.docstates
 
 .angular/
+# Angular build output
+/dist/
+/dist/*
+/dist/**/*
+
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -198,8 +203,16 @@ publish/
 *.azurePubxml
 # Note: Comment the next line if you want to checkin your web deploy settings,
 # but database connection strings (with potential passwords) will be unencrypted
+# ASP.NET publish configuration files
 *.pubxml
 *.publishproj
+/bin/
+/obj/
+/obj/*
+/obj/**/*
+# Ignore specific folders in the publish output
+/Properties/
+/.config/
 
 # Microsoft Azure Web App publish settings. Comment the next line if you want to
 # checkin your Azure Web App publish settings, but sensitive information contained
