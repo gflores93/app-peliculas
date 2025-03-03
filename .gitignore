@@ -31,9 +31,9 @@ obj/
 
 .angular/
 # Angular build output
-/dist/
-/dist/*
-/dist/**/*
+/angular-peliculas/dist/
+/angular-peliculas/dist/*
+/angular-peliculas/dist/**/*
 
 
 # User-specific files (MonoDevelop/Xamarin Studio)
@@ -211,8 +211,8 @@ publish/
 /obj/*
 /obj/**/*
 # Ignore specific folders in the publish output
-/Properties/
-/.config/
+*Properties/
+*.config/
 
 # Microsoft Azure Web App publish settings. Comment the next line if you want to
 # checkin your Azure Web App publish settings, but sensitive information contained
